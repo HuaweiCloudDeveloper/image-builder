@@ -1,0 +1,12 @@
+{
+  "build_name": "ubuntu-22.04",
+  "distribution": "Ubuntu",
+  "distribution_release": "jammy",
+  "distribution_version": "22.04",
+  "root_device_name": "/dev/vda1",
+  "extra_debs": "cloud-init",
+  "pause_image": "registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.10",
+  "ubuntu_repo": "https://mirrors.aliyun.com/ubuntu",
+  "ubuntu_security_repo": "https://mirrors.aliyun.com/ubuntu",
+  "kubernetes_container_registry": "registry.cn-hangzhou.aliyuncs.com/google_containers"
+}

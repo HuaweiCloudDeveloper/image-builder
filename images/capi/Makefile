@@ -74,6 +74,11 @@ deps-ami: deps-common
 	hack/ensure-ansible-windows.sh
 	$(PACKER) init packer/config.pkr.hcl
 
+.PHONY: deps-huaweicloud
+deps-huaweicloud: ## Installs/checks dependencies for HuaweiCloud builds
+deps-huaweicloud: deps-common
+	$(PACKER) init packer/config.pkr.hcl
+
 .PHONY: deps-azure
 deps-azure: ## Installs/checks dependencies for Azure builds
 deps-azure: deps-common
@@ -357,6 +362,7 @@ NODE_OVA_VSPHERE_BASE_BUILD_NAMES		:=	$(addprefix node-ova-vsphere-base-,$(PLATF
 NODE_OVA_VSPHERE_CLONE_BUILD_NAMES		:=	$(addprefix node-ova-vsphere-clone-,$(PLATFORMS_AND_VERSIONS))
 
 AMI_BUILD_NAMES			   ?= ami-centos-7 ami-ubuntu-2004 ami-ubuntu-2204 ami-ubuntu-2404 ami-amazon-2 ami-amazon-2023 ami-flatcar ami-windows-2019 ami-rockylinux-8 ami-rhel-8
+HUAWEICLOUD_BUILD_NAMES	   ?= huaweicloud-ubuntu-2204
 GCE_BUILD_NAMES			   ?= gce-ubuntu-2004 gce-ubuntu-2204 gce-ubuntu-2404 gce-rhel-8
 
 # Make needs these lists to be space delimited, no quotes
@@ -405,6 +411,8 @@ NODE_OVA_VSPHERE_BASE_BUILD_TARGETS	:= $(addprefix build-,$(NODE_OVA_VSPHERE_BAS
 NODE_OVA_VSPHERE_CLONE_BUILD_TARGETS	:= $(addprefix build-,$(NODE_OVA_VSPHERE_CLONE_BUILD_NAMES))
 AMI_BUILD_TARGETS	:= $(addprefix build-,$(AMI_BUILD_NAMES))
 AMI_VALIDATE_TARGETS	:= $(addprefix validate-,$(AMI_BUILD_NAMES))
+HUAWEICLOUD_BUILD_TARGETS	:= $(addprefix build-,$(HUAWEICLOUD_BUILD_NAMES))
+HUAWEICLOUD_VALIDATE_TARGETS	:= $(addprefix validate-,$(HUAWEICLOUD_BUILD_NAMES))
 GCE_BUILD_TARGETS	:= $(addprefix build-,$(GCE_BUILD_NAMES))
 GCE_VALIDATE_TARGETS	:= $(addprefix validate-,$(GCE_BUILD_NAMES))
 AZURE_BUILD_VHD_TARGETS	:= $(addprefix build-,$(AZURE_BUILD_VHD_NAMES))
@@ -481,6 +489,14 @@ $(AMI_BUILD_TARGETS): deps-ami
 .PHONY: $(AMI_VALIDATE_TARGETS)
 $(AMI_VALIDATE_TARGETS): deps-ami
 	$(PACKER) validate $(if $(findstring windows,$@),$(PACKER_WINDOWS_NODE_FLAGS),$(PACKER_NODE_FLAGS)) -var-file="$(abspath packer/ami/$(subst validate-ami-,,$@).json)" $(ABSOLUTE_PACKER_VAR_FILES) packer/ami/packer$(if $(findstring windows,$@),-windows,).json
+
+.PHONY: $(HUAWEICLOUD_BUILD_TARGETS)
+$(HUAWEICLOUD_BUILD_TARGETS): deps-huaweicloud
+	$(PACKER) build $(PACKER_NODE_FLAGS) -var-file="$(abspath packer/huaweicloud/$(subst build-huaweicloud-,,$@).json)" $(ABSOLUTE_PACKER_VAR_FILES) packer/huaweicloud/packer.json
+
+.PHONY: $(HUAWEICLOUD_VALIDATE_TARGETS)
+$(HUAWEICLOUD_VALIDATE_TARGETS): deps-huaweicloud
+	$(PACKER) validate $(PACKER_NODE_FLAGS) -var-file="$(abspath packer/huaweicloud/$(subst validate-huaweicloud-,,$@).json)" $(ABSOLUTE_PACKER_VAR_FILES) packer/huaweicloud/packer.json
 
 .PHONY: $(GCE_BUILD_TARGETS)
 $(GCE_BUILD_TARGETS): deps-gce
@@ -656,6 +672,8 @@ build-ami-rhel-8: ## Builds RHEL-8 AMI
 build-ami-flatcar: ## Builds Flatcar
 build-ami-windows-2019: ## Build Windows Server 2019 AMI Packer config
 build-ami-all: $(AMI_BUILD_TARGETS) ## Builds all AMIs
+
+build-huaweicloud-ubuntu-2204:
 
 build-azure-sig-ubuntu-2004: ## Builds Ubuntu 20.04 Azure managed image in Shared Image Gallery
 build-azure-sig-ubuntu-2204: ## Builds Ubuntu 22.04 Azure managed image in Shared Image Gallery
@@ -889,6 +907,8 @@ validate-ami-ubuntu-2204: ## Validates Ubuntu 22.04 AMI Packer config
 validate-ami-ubuntu-2404: ## Validates Ubuntu 22.04 AMI Packer config
 validate-ami-windows-2019: ## Validates Windows Server 2019 AMI Packer config
 validate-ami-all: $(AMI_VALIDATE_TARGETS) ## Validates all AMIs Packer config
+
+validate-huaweicloud-ubuntu-2004: ## Validates Ubuntu 20.04 HuaweiCloud Snapshot Packer config
 
 validate-azure-sig-centos-7: ## Validates CentOS 7 Azure managed image in Shared Image Gallery Packer config
 validate-azure-sig-mariner-2: ## Validates Azure Linux 2 Azure managed image in Shared Image Gallery Packer config
