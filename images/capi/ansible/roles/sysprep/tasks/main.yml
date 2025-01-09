@@ -142,7 +142,7 @@
     file_type: any
     paths:
       - /lib/netplan
-      - /etc/netplan
+      # - /etc/netplan
       - /run/netplan
     pattern: "*.yaml"
   register: netplan_files
