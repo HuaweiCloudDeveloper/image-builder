@@ -25,3 +25,20 @@
     executable: pip3
     state: absent
   when: ansible_os_family == "Debian"
+
+- name: Create dns default conf directory
+  ansible.builtin.file:
+    path: /etc/systemd/resolved.conf.d
+    state: directory
+  when: ansible_os_family == "Debian"
+
+- name: Add default dns
+  ansible.builtin.copy:
+    dest: /etc/systemd/resolved.conf.d/default.conf
+    content: |-
+      [Resolve]
+      DNS=8.8.8.8
+    owner: root
+    group: root
+    mode: "0644"
+  when: ansible_os_family == "Debian"
