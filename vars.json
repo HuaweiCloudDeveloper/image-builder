@@ -5,7 +5,7 @@
     "kubernetes_cni_semver": "v1.6.0",
     "kubernetes_cni_deb_version": "1.6.0-1.1",
     "crictl_version": "v1.32.0",
-    "ssh_host": "",
-    "ssh_username": "",
-    "ssh_password": ""
+    "pause_image": "registry.k8s.io/pause:3.10",
+    "access_key": "",
+    "secret_key": ""
 }

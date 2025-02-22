@@ -1,10 +1,49 @@
 {
   "builders": [
     {
-      "type": "null",
-      "ssh_host": "{{user `ssh_host`}}",
+      "access_key": "{{user `access_key`}}",
+      "availability_zone": "{{user `availability_zone`}}",
+      "associate_public_ip_address": "{{user `associate_public_ip_address`}}",
+      "eip_bandwidth_size": "{{user `eip_bandwidth_size`}}",
+      "eip_type": "{{user `eip_type`}}",
+      "secret_key": "{{user `secret_key`}}",
+      "image_description": "{{user `image_description`}}",
+      "image_name": "{{user `image_name`}}",
+      "image_tags": {
+        "build_date": "{{isotime `2006-01-02`}}",
+        "build_timestamp": "{{user `build_timestamp`}}",
+        "containerd_version": "{{user `containerd_version`}}",
+        "distribution": "{{user `distribution`}}",
+        "distribution_release": "{{user `distribution_release`}}",
+        "distribution_version": "{{user `distribution_version`}}",
+        "image_builder_version": "{{user `ib_version`}}",
+        "kubernetes_cni_version": "{{user `kubernetes_cni_semver`}}",
+        "kubernetes_version": "{{user `kubernetes_semver`}}"
+      },
+      "image_type": "system",
+      "flavor": "{{user `image_flavor`}}",
+      "kms_key_id": "{{user `kms_key_id`}}",
+      "pause_before_connecting": "{{user `pause_before_connecting`}}",
+      "region": "{{user `huaweicloud_region`}}",
+      "security_groups": "{{user `security_groups`}}",
+      "subnets": "{{user `subnets`}}",
+      "source_image": "{{user `source_image`}}",
+      "source_image_filter": {
+        "filters": {
+          "name": "{{user `image_filter_name`}}",
+          "visibility": "public"
+        },
+        "most_recent": true
+      },
+      "ssh_ip_version": 4,
       "ssh_username": "{{user `ssh_username`}}",
-      "ssh_password": "{{user `ssh_password`}}"
+      "type": "huaweicloud-ecs",
+      "user_data": "{{user `user_data`}}",
+      "user_data_file": "{{user `user_data_file`}}",
+      "volume_type": "{{user `volume_type`}}",
+      "volume_size": "{{user `volume_size`}}",
+      "vpc_id": "{{user `vpc_id`}}",
+      "wait_image_ready_timeout": "{{user `wait_image_ready_timeout`}}"
     }
   ],
   "post-processors": [
@@ -74,6 +113,11 @@
     }
   ],
   "variables": {
+    "access_key": "",
+    "availability_zone": "ap-southeast-1g",
+    "associate_public_ip_address": "true",
+    "eip_bandwidth_size": "5",
+    "eip_type": "5_bgp",
     "ansible_common_vars": "",
     "ansible_extra_vars": "",
     "ansible_scp_extra_args": "",
@@ -86,9 +130,13 @@
     "containerd_version": null,
     "crictl_url": "https://files.m.daocloud.io/github.com/kubernetes-sigs/cri-tools/releases/download/v{{user `crictl_version`}}/crictl-v{{user `crictl_version`}}-linux-amd64.tar.gz",
     "crictl_version": null,
-    "encrypted": "false",
     "existing_ansible_ssh_args": "{{env `ANSIBLE_SSH_ARGS`}}",
+    "huaweicloud_region": "ap-southeast-1",
     "ib_version": "{{env `IB_VERSION`}}",
+    "image_description": "Cluster API base image designed for {{user `kubernetes_semver`}}",
+    "image_flavor": "x1.2u.4g",
+    "image_name": "caphw-hwi-{{user `build_name`}}-{{user `kubernetes_semver`}}-{{user `build_timestamp`}}",
+    "kms_key_id": "",
     "kubernetes_cni_deb_version": null,
     "kubernetes_cni_http_source": null,
     "kubernetes_cni_rpm_version": null,
@@ -108,22 +156,19 @@
     "kubernetes_semver": null,
     "kubernetes_source_type": null,
     "manifest_output": "manifest.json",
+    "pause_before_connecting": "1m",
     "python_path": "",
-    "skip_profile_validation": "false",
-    "snapshot_groups": "all",
-    "snapshot_users": "",
+    "secret_key": "",
+    "security_groups": "",
     "ssh_keypair_name": "",
     "ssh_private_key_file": "",
+    "ssh_username": "root",
     "subnet_id": "",
-    "temporary_security_group_source_cidrs": "",
-    "throughput": "125",
     "user_data": "#cloud-config\nrepo_upgrade: none",
     "user_data_file": "",
-    "volume_size": "8",
-    "volume_type": "gp3",
+    "volume_size": "10",
+    "volume_type": "GPSSD",
     "vpc_id": "",
-    "ssh_host": "",
-    "ssh_username": "",
-    "ssh_password": ""
+    "wait_image_ready_timeout": "1h"
   }
 }

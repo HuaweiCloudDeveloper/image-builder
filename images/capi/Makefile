@@ -78,6 +78,7 @@ deps-ami: deps-common
 deps-huaweicloud: ## Installs/checks dependencies for HuaweiCloud builds
 deps-huaweicloud: deps-common
 	$(PACKER) init packer/config.pkr.hcl
+	$(PACKER) init packer/huaweicloud/config.pkr.hcl
 
 .PHONY: deps-azure
 deps-azure: ## Installs/checks dependencies for Azure builds

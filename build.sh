@@ -1,6 +1,9 @@
-# Temporarily using the `null` type builder,
-# and fill in the `ssh information in vars.json` to build image.
-#
-# Afterwards, for fullly automation, it should be moved to huaweicloud builder(https://github.com/huaweicloud/packer-plugin-huaweicloud)
-#
+#!/bin/bash
+
+# Set `access_key` and `secret_key` in vars.json
+# , and cloud be set DEBUG flag:
+#   export HW_DEBUG=1
+#   export PACKER_LOG=1
+#   export PACKER_LOG_PATH="./packer.log"
+
 PACKER_VAR_FILES=$PWD/vars.json make build-huaweicloud-ubuntu-2204
